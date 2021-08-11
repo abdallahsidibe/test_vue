@@ -1,19 +1,41 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+        <!-----------En fonction du type du component Select--------------->
+    <Select :liste="pokemons" type="guide"></Select>>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import axios from "axios"; //Utilisation de Axios pour consommer des API
+import Select from "./components/Select.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
+    Select,
+  },
+
+  data() {
+    return {
+      pokemons:[]
+    };
+  },
+/**La méthode GetList() nous renvoie 
+ * 20 éléments depuis l'url
+ */
+  methods: {
+    GetList() {
+      axios.get("https://pokeapi.co/api/v2/pokemon/?offset=20&limit=20")//appel du point de terminaison de l’API Pokemon
+      .then((data) => {
+        this.pokemons = data.data.results;
+      });
+    }
+  },
+  mounted(){
+    this.GetList();
+
   }
-}
+};
 </script>
 
 <style>
